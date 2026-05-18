@@ -23,6 +23,7 @@
           <button id="commandBtn" type="button">Command</button>
           <button id="focusModeBtn" type="button">Focus</button>
           <button id="densityBtn" type="button">Compact</button>
+          <button id="shareBtn" type="button">Share</button>
           <button id="playBtn" type="button">Play</button>
           <button id="stopBtn" type="button">Stop</button>
           <button id="copyExportBtn" type="button">Copy Session</button>
@@ -301,6 +302,7 @@
             <button id="railPlayBtn" type="button">Play sequence</button>
             <button id="railMutateBtn" type="button">Mutate unlocked</button>
             <button id="railMorphBtn" type="button">Morph idea</button>
+            <button id="railShareBtn" type="button">Share state</button>
             <button id="railLockBtn" type="button">Lock current</button>
             <button id="railUnlockBtn" type="button">Unlock all</button>
             <button id="railCommandBtn" type="button">Open command</button>
@@ -347,8 +349,13 @@
               <div class="transport-panel">
                 <button class="primary" id="playInlineBtn" type="button">Play</button>
                 <button id="stopInlineBtn" type="button">Stop</button>
+                <button id="timerBtn" type="button">Timer</button>
                 <label>Volume <input id="playbackVolume" type="range" min="0" max="100" value="42"></label>
                 <label>Loop <input id="playbackLoop" type="checkbox" checked></label>
+              </div>
+              <div class="practice-timer" id="practiceTimer">
+                <b id="timerReadout">12:00</b>
+                <span id="timerPhase">Ready</span>
               </div>
               <div class="playback-progress" aria-label="Playback progress">
                 <span id="playbackProgress"></span>
@@ -399,7 +406,15 @@
             <section class="output-section">
               <div class="section-head">
                 <h3>Markdown session card</h3>
-                <button id="copyExportInlineBtn" type="button">Copy</button>
+                <div class="section-actions">
+                  <button id="copyExportInlineBtn" type="button">Copy</button>
+                  <button id="downloadJsonBtn" type="button">JSON</button>
+                  <button id="downloadMidiBtn" type="button">MIDI Text</button>
+                </div>
+              </div>
+              <div class="import-row">
+                <input id="importConfigInput" type="text" placeholder="Paste shared config JSON or URL hash">
+                <button id="importConfigBtn" type="button">Import</button>
               </div>
               <pre class="export-output" id="exportOutput"></pre>
             </section>

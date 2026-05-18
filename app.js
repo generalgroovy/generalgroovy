@@ -50,6 +50,8 @@ const outputs = {
   stepLane: $("#stepLane"),
   playbackStatus: $("#playbackStatus"),
   playbackProgress: $("#playbackProgress"),
+  timerReadout: $("#timerReadout"),
+  timerPhase: $("#timerPhase"),
   theoryVisualizer: $("#theoryVisualizer"),
   visualSummary: $("#visualSummary"),
   historyList: $("#historyList")
@@ -64,6 +66,8 @@ let focusMode = false;
 let compactMode = false;
 let sessionHistory = [];
 let lastConfigSnapshot = null;
+let timerId = null;
+let timerRemaining = 0;
 
 const STORAGE_KEYS = {
   config: "generalgroovy.config",
@@ -81,6 +85,10 @@ const COMMANDS = [
   { label: "Preset Outside", detail: "Altered/post-tonal exploration", run: () => applyPreset("outside") },
   { label: "Preset Composer", detail: "Mathematical songwriting seed", run: () => applyPreset("composer") },
   { label: "Morph idea", detail: "Subtly mutate density, rhythm, transform, and tempo", run: morphIdea },
+  { label: "Share session", detail: "Copy a URL containing the current configuration", run: shareSession },
+  { label: "Download JSON", detail: "Save the current practice config and output", run: downloadJson },
+  { label: "Download MIDI text", detail: "Save a DAW-friendly note event list", run: downloadMidiText },
+  { label: "Practice timer", detail: "Start or stop the session timer", run: toggleTimer },
   { label: "Toggle compact mode", detail: "Switch dashboard density", run: toggleCompactMode },
   { label: "View Overview", detail: "Show analysis and visualizer", run: () => switchView("overview") },
   { label: "View Playback", detail: "Show sequencer lane", run: () => switchView("playback") },
@@ -157,6 +165,12 @@ function wireEvents() {
   $("#railUnlockBtn").addEventListener("click", () => setAllLocks(false));
   $("#railMutateBtn").addEventListener("click", surprise);
   $("#railMorphBtn").addEventListener("click", morphIdea);
+  $("#shareBtn").addEventListener("click", shareSession);
+  $("#railShareBtn").addEventListener("click", shareSession);
+  $("#downloadJsonBtn").addEventListener("click", downloadJson);
+  $("#downloadMidiBtn").addEventListener("click", downloadMidiText);
+  $("#importConfigBtn").addEventListener("click", importConfig);
+  $("#timerBtn").addEventListener("click", toggleTimer);
   $("#commandBtn").addEventListener("click", openCommandPalette);
   $("#railCommandBtn").addEventListener("click", openCommandPalette);
   $("#focusModeBtn").addEventListener("click", toggleFocusMode);
@@ -206,7 +220,8 @@ function restoreState() {
     document.body.classList.toggle("compact-mode", compactMode);
     $("#densityBtn").textContent = compactMode ? "Comfort" : "Compact";
     sessionHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || "[]");
-    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.config) || "null");
+    const shared = parseSharedHash();
+    const saved = shared || JSON.parse(localStorage.getItem(STORAGE_KEYS.config) || "null");
     if (!saved) return;
     for (const [key, value] of Object.entries(saved)) {
       if (!controls[key]) continue;
@@ -226,6 +241,19 @@ function restoreState() {
 
 function persistConfig(config) {
   localStorage.setItem(STORAGE_KEYS.config, JSON.stringify(config));
+}
+
+function parseSharedHash() {
+  if (!location.hash.startsWith("#gg=")) return null;
+  try {
+    return JSON.parse(decodeURIComponent(atob(location.hash.slice(4))));
+  } catch {
+    return null;
+  }
+}
+
+function encodeConfig(config) {
+  return btoa(encodeURIComponent(JSON.stringify(config)));
 }
 
 function getConfig() {
@@ -281,6 +309,7 @@ function render() {
   const pattern = lastPattern;
   persistConfig(pattern.config);
   pushHistory(pattern);
+  if (!timerId) timerRemaining = pattern.config.minutes * 60;
   outputs.patternType.textContent = pattern.typeLabel;
   outputs.patternTitle.textContent = pattern.title;
   outputs.warning.textContent = pattern.warning;
@@ -291,6 +320,8 @@ function render() {
   outputs.metricTransform.textContent = TRANSFORMATIONS[pattern.config.transformation];
   outputs.metricTuning.textContent = TUNINGS[pattern.config.tuning].label;
   outputs.tempoOut.textContent = pattern.config.tempo;
+  outputs.timerReadout.textContent = formatTime(pattern.config.minutes * 60);
+  outputs.timerPhase.textContent = timerId ? "Running" : "Ready";
   outputs.positionLabel.textContent = pattern.positionLabel;
   outputs.tabOutput.textContent = pattern.tab;
   outputs.chordChart.textContent = pattern.chordChart;
@@ -564,6 +595,109 @@ function clearHistory() {
   sessionHistory = [];
   localStorage.removeItem(STORAGE_KEYS.history);
   renderHistory();
+}
+
+async function shareSession() {
+  const config = getConfig();
+  const url = `${location.origin}${location.pathname}#gg=${encodeConfig(config)}`;
+  await navigator.clipboard.writeText(url);
+  pulseStatus("Share URL copied");
+}
+
+function importConfig() {
+  const raw = $("#importConfigInput").value.trim();
+  if (!raw) return;
+  let config = null;
+  try {
+    const hash = raw.includes("#gg=") ? raw.split("#gg=")[1] : raw.replace(/^#gg=/, "");
+    config = JSON.parse(decodeURIComponent(atob(hash)));
+  } catch {
+    try {
+      config = JSON.parse(raw);
+    } catch {
+      pulseStatus("Import failed");
+      return;
+    }
+  }
+  applyConfig(config);
+  generationSeed = config.seed || String(Date.now());
+  render();
+  pulseStatus("Imported");
+}
+
+function downloadJson() {
+  const payload = {
+    config: lastPattern.config,
+    title: lastPattern.title,
+    tab: lastPattern.tab,
+    chordChart: lastPattern.chordChart,
+    analysis: lastPattern.analysis,
+    practiceLoop: lastPattern.practiceLoop,
+    variations: lastPattern.variations
+  };
+  downloadText(`${slug(lastPattern.title)}.json`, JSON.stringify(payload, null, 2), "application/json");
+}
+
+function downloadMidiText() {
+  const stepMs = stepDurationMs(lastPattern.config);
+  const rows = lastPattern.notes.map((note) => {
+    const seconds = ((note.step * stepMs) / 1000).toFixed(3);
+    return [seconds, note.midi, note.note, note.string, note.fret, note.accent ? "accent" : ""].join("\t");
+  });
+  downloadText(`${slug(lastPattern.title)}-events.tsv`, ["time\tmidi\tnote\tstring\tfret\tmark", ...rows].join("\n"), "text/tab-separated-values");
+}
+
+function downloadText(filename, text, type) {
+  const blob = new Blob([text], { type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function toggleTimer() {
+  if (timerId) {
+    window.clearInterval(timerId);
+    timerId = null;
+    outputs.timerPhase.textContent = "Paused";
+    return;
+  }
+  timerRemaining = timerRemaining || lastPattern.config.minutes * 60;
+  outputs.timerPhase.textContent = "Running";
+  timerId = window.setInterval(() => {
+    timerRemaining = Math.max(0, timerRemaining - 1);
+    outputs.timerReadout.textContent = formatTime(timerRemaining);
+    if (timerRemaining === 0) {
+      window.clearInterval(timerId);
+      timerId = null;
+      outputs.timerPhase.textContent = "Complete";
+      clickSoundSafe();
+    }
+  }, 1000);
+}
+
+function clickSoundSafe() {
+  if (!audioContext) return;
+  clickSound(1200, 0.08, 0.2);
+}
+
+function pulseStatus(text) {
+  outputs.playbackStatus.textContent = text;
+  window.setTimeout(() => {
+    if (!playing) outputs.playbackStatus.textContent = "Stopped";
+  }, 1200);
+}
+
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+function slug(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "generalgroovy";
 }
 
 function surprise() {

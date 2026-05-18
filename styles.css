@@ -346,12 +346,55 @@ input[type="range"] {
   background: rgba(255, 255, 255, 0.055);
 }
 
+.practice-timer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(132, 204, 22, 0.12), transparent 48%),
+    rgba(255, 255, 255, 0.045);
+}
+
+.practice-timer b {
+  font-size: 1.6rem;
+  letter-spacing: 0;
+}
+
+.practice-timer span {
+  color: var(--muted);
+  font-weight: 850;
+}
+
 .playback-progress {
   height: 8px;
   border: 1px solid var(--line);
   border-radius: 999px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.05);
+}
+
+.section-actions,
+.import-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.import-row {
+  margin-bottom: 12px;
+}
+
+.import-row input {
+  min-width: min(420px, 100%);
+  flex: 1 1 320px;
+  min-height: 40px;
+  padding: 0 12px;
 }
 
 .playback-progress span {
