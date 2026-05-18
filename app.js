@@ -48,7 +48,10 @@ const outputs = {
   variations: $("#variations"),
   exportOutput: $("#exportOutput"),
   stepLane: $("#stepLane"),
-  playbackStatus: $("#playbackStatus")
+  playbackStatus: $("#playbackStatus"),
+  playbackProgress: $("#playbackProgress"),
+  theoryVisualizer: $("#theoryVisualizer"),
+  visualSummary: $("#visualSummary")
 };
 
 let generationSeed = String(Date.now());
@@ -56,8 +59,27 @@ let lastPattern = null;
 let audioContext = null;
 let playbackTimers = [];
 let playing = false;
+let focusMode = false;
 
 const RANDOMIZABLE_CONTROL_IDS = controlIds.filter((id) => !["playbackWave"].includes(id));
+const COMMANDS = [
+  { label: "Generate new session", detail: "Regenerate with current settings", run: () => $("#generateBtn").click() },
+  { label: "Play sequence", detail: "Start audio playback", run: playPattern },
+  { label: "Stop playback", detail: "Stop all scheduled notes", run: stopPlayback },
+  { label: "Mutate unlocked", detail: "Randomize unlocked controls", run: surprise },
+  { label: "Preset Daily", detail: "Balanced everyday practice", run: () => applyPreset("daily") },
+  { label: "Preset Outside", detail: "Altered/post-tonal exploration", run: () => applyPreset("outside") },
+  { label: "Preset Composer", detail: "Mathematical songwriting seed", run: () => applyPreset("composer") },
+  { label: "View Overview", detail: "Show analysis and visualizer", run: () => switchView("overview") },
+  { label: "View Playback", detail: "Show sequencer lane", run: () => switchView("playback") },
+  { label: "View Tab", detail: "Show tablature", run: () => switchView("tab") },
+  { label: "View Neck", detail: "Show fretboard", run: () => switchView("neck") },
+  { label: "View Routine", detail: "Show practice plan", run: () => switchView("routine") },
+  { label: "View Export", detail: "Show markdown session", run: () => switchView("export") },
+  { label: "Toggle focus mode", detail: "Hide controls for practice", run: toggleFocusMode },
+  { label: "Lock all", detail: "Freeze all randomization parameters", run: () => setAllLocks(true) },
+  { label: "Unlock all", detail: "Allow all randomization parameters", run: () => setAllLocks(false) }
+];
 
 function init() {
   fillSelect(controls.mode, MODES);
@@ -121,12 +143,18 @@ function wireEvents() {
   $("#railLockBtn").addEventListener("click", () => setAllLocks(true));
   $("#railUnlockBtn").addEventListener("click", () => setAllLocks(false));
   $("#railMutateBtn").addEventListener("click", surprise);
+  $("#commandBtn").addEventListener("click", openCommandPalette);
+  $("#railCommandBtn").addEventListener("click", openCommandPalette);
+  $("#focusModeBtn").addEventListener("click", toggleFocusMode);
+  $("#closeCommandBtn").addEventListener("click", closeCommandPalette);
+  $("#commandSearch").addEventListener("input", renderCommandList);
   $("#expandAllBtn").addEventListener("click", () => setDetailsOpen(true));
   $("#collapseAllBtn").addEventListener("click", () => setDetailsOpen(false));
   $("#controlSearch").addEventListener("input", filterControls);
   document.querySelectorAll("[data-preset]").forEach((button) => {
     button.addEventListener("click", () => applyPreset(button.dataset.preset));
   });
+  document.addEventListener("keydown", handleKeys);
 
   controls.tuning.addEventListener("change", () => {
     renderStringPicker();
@@ -227,6 +255,7 @@ function render() {
   renderMeta(pattern);
   renderFretboard(pattern);
   renderStepLane(pattern);
+  renderTheoryVisualizer(pattern);
 }
 
 function renderMeta(pattern) {
@@ -287,6 +316,48 @@ function switchView(view) {
   document.querySelectorAll(".view").forEach((section) => {
     section.classList.toggle("active", section.id === `view-${view}`);
   });
+}
+
+function openCommandPalette() {
+  $("#commandDialog").showModal();
+  $("#commandSearch").value = "";
+  renderCommandList();
+  $("#commandSearch").focus();
+}
+
+function closeCommandPalette() {
+  $("#commandDialog").close();
+}
+
+function renderCommandList() {
+  const query = $("#commandSearch").value?.trim().toLowerCase() || "";
+  const matches = COMMANDS.filter((command) => `${command.label} ${command.detail}`.toLowerCase().includes(query));
+  $("#commandList").innerHTML = matches.map((command, index) => `
+    <button type="button" data-command="${index}">
+      <b>${escapeHtml(command.label)}</b>
+      <span>${escapeHtml(command.detail)}</span>
+    </button>
+  `).join("");
+  $("#commandList").querySelectorAll("[data-command]").forEach((button) => {
+    button.addEventListener("click", () => {
+      matches[Number(button.dataset.command)].run();
+      closeCommandPalette();
+    });
+  });
+}
+
+function handleKeys(event) {
+  if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+    event.preventDefault();
+    openCommandPalette();
+  }
+  if (event.key === "Escape" && $("#commandDialog").open) closeCommandPalette();
+}
+
+function toggleFocusMode() {
+  focusMode = !focusMode;
+  document.body.classList.toggle("focus-mode", focusMode);
+  $("#focusModeBtn").textContent = focusMode ? "Exit Focus" : "Focus";
 }
 
 function renderLockGrid() {
@@ -429,6 +500,23 @@ function renderStepLane(pattern) {
   }).join("");
 }
 
+function renderTheoryVisualizer(pattern) {
+  const pitchClasses = [...new Set(pattern.notes.map((note) => note.pitch).filter(Number.isInteger))];
+  const activeSteps = new Set(pattern.rhythm.filter((step) => !step.rest).map((step) => step.step % 16));
+  const cells = [];
+  for (let pitch = 0; pitch < 12; pitch += 1) {
+    const isActive = pitchClasses.includes(pitch);
+    const isRoot = NOTES[pitch] === pattern.config.key;
+    cells.push(`<span class="pitch-node ${isActive ? "active" : ""} ${isRoot ? "root" : ""}" style="--i:${pitch}">${NOTES[pitch]}</span>`);
+  }
+  const rhythmCells = Array.from({ length: 16 }, (_, step) => `<span class="rhythm-node ${activeSteps.has(step) ? "active" : ""}">${step + 1}</span>`).join("");
+  outputs.visualSummary.textContent = `${pitchClasses.length} pitch classes / ${activeSteps.size} active rhythm cells`;
+  outputs.theoryVisualizer.innerHTML = `
+    <div class="pitch-orbit">${cells.join("")}<b>${escapeHtml(pattern.config.key)}</b></div>
+    <div class="rhythm-orbit">${rhythmCells}</div>
+  `;
+}
+
 async function playPattern() {
   if (!lastPattern) render();
   stopPlayback();
@@ -467,6 +555,7 @@ function stopPlayback() {
   playbackTimers = [];
   playing = false;
   if (outputs.playbackStatus) outputs.playbackStatus.textContent = "Stopped";
+  if (outputs.playbackProgress) outputs.playbackProgress.style.width = "0%";
   document.querySelectorAll(".step-chip.playing").forEach((chip) => chip.classList.remove("playing"));
 }
 
@@ -498,6 +587,10 @@ function clickSound(frequency, duration, volume) {
 function highlightStep(step) {
   document.querySelectorAll(".step-chip.playing").forEach((chip) => chip.classList.remove("playing"));
   document.querySelector(`[data-step="${step}"]`)?.classList.add("playing");
+  if (lastPattern && outputs.playbackProgress) {
+    const total = Math.max(lastPattern.rhythm.length, lastPattern.notes.length, 1);
+    outputs.playbackProgress.style.width = `${Math.min(100, ((step + 1) / total) * 100)}%`;
+  }
 }
 
 function stepDurationMs(config) {

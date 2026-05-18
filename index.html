@@ -20,6 +20,8 @@
           </div>
         </div>
         <div class="top-actions">
+          <button id="commandBtn" type="button">Command</button>
+          <button id="focusModeBtn" type="button">Focus</button>
           <button id="playBtn" type="button">Play</button>
           <button id="stopBtn" type="button">Stop</button>
           <button id="copyExportBtn" type="button">Copy Session</button>
@@ -299,6 +301,7 @@
             <button id="railMutateBtn" type="button">Mutate unlocked</button>
             <button id="railLockBtn" type="button">Lock current</button>
             <button id="railUnlockBtn" type="button">Unlock all</button>
+            <button id="railCommandBtn" type="button">Open command</button>
           </div>
 
           <section class="view active" id="view-overview">
@@ -317,6 +320,13 @@
                 <ul class="analysis-list" id="analysisList"></ul>
               </section>
             </div>
+            <section class="output-section visual-section">
+              <div class="section-head">
+                <h3>Theory visualizer</h3>
+                <span id="visualSummary">Pitch map</span>
+              </div>
+              <div class="theory-visualizer" id="theoryVisualizer" aria-label="Generated pitch and rhythm visualizer"></div>
+            </section>
           </section>
 
           <section class="view" id="view-playback">
@@ -330,6 +340,9 @@
                 <button id="stopInlineBtn" type="button">Stop</button>
                 <label>Volume <input id="playbackVolume" type="range" min="0" max="100" value="42"></label>
                 <label>Loop <input id="playbackLoop" type="checkbox" checked></label>
+              </div>
+              <div class="playback-progress" aria-label="Playback progress">
+                <span id="playbackProgress"></span>
               </div>
               <div class="step-lane" id="stepLane"></div>
             </section>
@@ -385,6 +398,17 @@
         </section>
       </section>
     </main>
+
+    <dialog class="command-dialog" id="commandDialog">
+      <div class="command-shell">
+        <div class="section-head">
+          <h3>Command palette</h3>
+          <button id="closeCommandBtn" type="button">Close</button>
+        </div>
+        <input id="commandSearch" type="text" placeholder="Search views, presets, actions">
+        <div class="command-list" id="commandList"></div>
+      </div>
+    </dialog>
 
     <script type="module" src="app.js"></script>
   </body>
