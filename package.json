@@ -1,0 +1,19 @@
+{
+  "name": "generalgroovy",
+  "version": "1.0.0",
+  "description": "A configurable guitar practice pattern generator for riffs, picking, chords, and progressions.",
+  "type": "module",
+  "scripts": {
+    "test": "node test.mjs",
+    "start": "node server.mjs"
+  },
+  "keywords": [
+    "guitar",
+    "practice",
+    "music",
+    "tabs",
+    "fretboard"
+  ],
+  "author": "",
+  "license": "MIT"
+}
