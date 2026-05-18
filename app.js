@@ -51,7 +51,8 @@ const outputs = {
   playbackStatus: $("#playbackStatus"),
   playbackProgress: $("#playbackProgress"),
   theoryVisualizer: $("#theoryVisualizer"),
-  visualSummary: $("#visualSummary")
+  visualSummary: $("#visualSummary"),
+  historyList: $("#historyList")
 };
 
 let generationSeed = String(Date.now());
@@ -60,6 +61,15 @@ let audioContext = null;
 let playbackTimers = [];
 let playing = false;
 let focusMode = false;
+let compactMode = false;
+let sessionHistory = [];
+let lastConfigSnapshot = null;
+
+const STORAGE_KEYS = {
+  config: "generalgroovy.config",
+  history: "generalgroovy.history",
+  compact: "generalgroovy.compact"
+};
 
 const RANDOMIZABLE_CONTROL_IDS = controlIds.filter((id) => !["playbackWave"].includes(id));
 const COMMANDS = [
@@ -70,6 +80,8 @@ const COMMANDS = [
   { label: "Preset Daily", detail: "Balanced everyday practice", run: () => applyPreset("daily") },
   { label: "Preset Outside", detail: "Altered/post-tonal exploration", run: () => applyPreset("outside") },
   { label: "Preset Composer", detail: "Mathematical songwriting seed", run: () => applyPreset("composer") },
+  { label: "Morph idea", detail: "Subtly mutate density, rhythm, transform, and tempo", run: morphIdea },
+  { label: "Toggle compact mode", detail: "Switch dashboard density", run: toggleCompactMode },
   { label: "View Overview", detail: "Show analysis and visualizer", run: () => switchView("overview") },
   { label: "View Playback", detail: "Show sequencer lane", run: () => switchView("playback") },
   { label: "View Tab", detail: "Show tablature", run: () => switchView("tab") },
@@ -120,6 +132,7 @@ function init() {
 
   renderStringPicker();
   renderLockGrid();
+  restoreState();
   wireEvents();
   render();
 }
@@ -143,9 +156,12 @@ function wireEvents() {
   $("#railLockBtn").addEventListener("click", () => setAllLocks(true));
   $("#railUnlockBtn").addEventListener("click", () => setAllLocks(false));
   $("#railMutateBtn").addEventListener("click", surprise);
+  $("#railMorphBtn").addEventListener("click", morphIdea);
   $("#commandBtn").addEventListener("click", openCommandPalette);
   $("#railCommandBtn").addEventListener("click", openCommandPalette);
   $("#focusModeBtn").addEventListener("click", toggleFocusMode);
+  $("#densityBtn").addEventListener("click", toggleCompactMode);
+  $("#clearHistoryBtn").addEventListener("click", clearHistory);
   $("#closeCommandBtn").addEventListener("click", closeCommandPalette);
   $("#commandSearch").addEventListener("input", renderCommandList);
   $("#expandAllBtn").addEventListener("click", () => setDetailsOpen(true));
@@ -182,6 +198,34 @@ function renderStringPicker() {
       ${string.name}
     </label>
   `).join("");
+}
+
+function restoreState() {
+  try {
+    compactMode = localStorage.getItem(STORAGE_KEYS.compact) === "true";
+    document.body.classList.toggle("compact-mode", compactMode);
+    $("#densityBtn").textContent = compactMode ? "Comfort" : "Compact";
+    sessionHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.history) || "[]");
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.config) || "null");
+    if (!saved) return;
+    for (const [key, value] of Object.entries(saved)) {
+      if (!controls[key]) continue;
+      if (controls[key].type === "checkbox") controls[key].checked = Boolean(value);
+      else controls[key].value = value;
+    }
+    if (saved.tuning) renderStringPicker();
+    if (Array.isArray(saved.strings)) {
+      document.querySelectorAll("#stringPicker input").forEach((input) => {
+        input.checked = saved.strings.includes(Number(input.value));
+      });
+    }
+  } catch {
+    sessionHistory = [];
+  }
+}
+
+function persistConfig(config) {
+  localStorage.setItem(STORAGE_KEYS.config, JSON.stringify(config));
 }
 
 function getConfig() {
@@ -235,6 +279,8 @@ function getConfig() {
 function render() {
   lastPattern = generatePattern(getConfig());
   const pattern = lastPattern;
+  persistConfig(pattern.config);
+  pushHistory(pattern);
   outputs.patternType.textContent = pattern.typeLabel;
   outputs.patternTitle.textContent = pattern.title;
   outputs.warning.textContent = pattern.warning;
@@ -256,6 +302,7 @@ function render() {
   renderFretboard(pattern);
   renderStepLane(pattern);
   renderTheoryVisualizer(pattern);
+  renderHistory();
 }
 
 function renderMeta(pattern) {
@@ -277,6 +324,58 @@ function renderMeta(pattern) {
       <span>${escapeHtml(value)}</span>
     </div>
   `).join("");
+}
+
+function pushHistory(pattern) {
+  const fingerprint = `${pattern.title}|${pattern.config.seed}`;
+  if (sessionHistory[0]?.fingerprint === fingerprint) return;
+  sessionHistory = [
+    {
+      fingerprint,
+      title: pattern.title,
+      mode: pattern.typeLabel,
+      theory: `${pattern.config.key} ${SCALES[pattern.config.scale].label}`,
+      rhythm: FEELS[pattern.config.feel].label,
+      tempo: pattern.config.tempo,
+      config: pattern.config
+    },
+    ...sessionHistory
+  ].slice(0, 8);
+  localStorage.setItem(STORAGE_KEYS.history, JSON.stringify(sessionHistory));
+}
+
+function renderHistory() {
+  outputs.historyList.innerHTML = sessionHistory.map((item, index) => `
+    <button type="button" data-history="${index}">
+      <b>${escapeHtml(item.title)}</b>
+      <span>${escapeHtml(item.mode)} / ${escapeHtml(item.theory)} / ${escapeHtml(item.rhythm)} / ${item.tempo} BPM</span>
+    </button>
+  `).join("");
+  outputs.historyList.querySelectorAll("[data-history]").forEach((button) => {
+    button.addEventListener("click", () => restoreHistoryItem(Number(button.dataset.history)));
+  });
+}
+
+function restoreHistoryItem(index) {
+  const item = sessionHistory[index];
+  if (!item) return;
+  applyConfig(item.config);
+  generationSeed = item.config.seed || String(Date.now());
+  render();
+}
+
+function applyConfig(config) {
+  for (const [key, value] of Object.entries(config)) {
+    if (!controls[key]) continue;
+    if (controls[key].type === "checkbox") controls[key].checked = Boolean(value);
+    else controls[key].value = value;
+  }
+  renderStringPicker();
+  if (Array.isArray(config.strings)) {
+    document.querySelectorAll("#stringPicker input").forEach((input) => {
+      input.checked = config.strings.includes(Number(input.value));
+    });
+  }
 }
 
 function renderFretboard(pattern) {
@@ -360,6 +459,13 @@ function toggleFocusMode() {
   $("#focusModeBtn").textContent = focusMode ? "Exit Focus" : "Focus";
 }
 
+function toggleCompactMode() {
+  compactMode = !compactMode;
+  document.body.classList.toggle("compact-mode", compactMode);
+  $("#densityBtn").textContent = compactMode ? "Comfort" : "Compact";
+  localStorage.setItem(STORAGE_KEYS.compact, String(compactMode));
+}
+
 function renderLockGrid() {
   const labels = {
     mode: "Focus", learningGoal: "Goal", minutes: "Minutes", difficulty: "Difficulty",
@@ -431,6 +537,33 @@ function applyPreset(preset) {
   }
   generationSeed = String(Date.now() + Math.random());
   render();
+}
+
+function morphIdea() {
+  lastConfigSnapshot = getConfig();
+  generationSeed = String(Date.now() + Math.random());
+  nudgeNumber("density", -2, 2, 1, 10);
+  nudgeNumber("difficulty", -1, 2, 1, 10);
+  nudgeNumber("tempo", -12, 16, 30, 260);
+  nudgeNumber("swing", -12, 18, 0, 75);
+  nudgeNumber("restRate", -8, 12, 0, 60);
+  if (!isLocked("transformation")) setRandom("transformation", Object.keys(TRANSFORMATIONS));
+  if (!isLocked("rhythmAlgorithm") && Math.random() > 0.45) setRandom("rhythmAlgorithm", Object.keys(RHYTHM_ALGORITHMS));
+  if (!isLocked("direction") && Math.random() > 0.45) setRandom("direction", OPTION_GROUPS.sequence);
+  render();
+}
+
+function nudgeNumber(id, minDelta, maxDelta, min, max) {
+  if (isLocked(id)) return;
+  const current = Number(controls[id].value || 0);
+  const delta = minDelta + Math.round(Math.random() * (maxDelta - minDelta));
+  controls[id].value = Math.min(max, Math.max(min, current + delta));
+}
+
+function clearHistory() {
+  sessionHistory = [];
+  localStorage.removeItem(STORAGE_KEYS.history);
+  renderHistory();
 }
 
 function surprise() {

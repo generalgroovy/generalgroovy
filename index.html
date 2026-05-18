@@ -22,6 +22,7 @@
         <div class="top-actions">
           <button id="commandBtn" type="button">Command</button>
           <button id="focusModeBtn" type="button">Focus</button>
+          <button id="densityBtn" type="button">Compact</button>
           <button id="playBtn" type="button">Play</button>
           <button id="stopBtn" type="button">Stop</button>
           <button id="copyExportBtn" type="button">Copy Session</button>
@@ -299,6 +300,7 @@
           <div class="interaction-rail" aria-label="Interactive controls">
             <button id="railPlayBtn" type="button">Play sequence</button>
             <button id="railMutateBtn" type="button">Mutate unlocked</button>
+            <button id="railMorphBtn" type="button">Morph idea</button>
             <button id="railLockBtn" type="button">Lock current</button>
             <button id="railUnlockBtn" type="button">Unlock all</button>
             <button id="railCommandBtn" type="button">Open command</button>
@@ -326,6 +328,13 @@
                 <span id="visualSummary">Pitch map</span>
               </div>
               <div class="theory-visualizer" id="theoryVisualizer" aria-label="Generated pitch and rhythm visualizer"></div>
+            </section>
+            <section class="output-section history-section">
+              <div class="section-head">
+                <h3>Session history</h3>
+                <button id="clearHistoryBtn" type="button">Clear</button>
+              </div>
+              <div class="history-list" id="historyList"></div>
             </section>
           </section>
 
