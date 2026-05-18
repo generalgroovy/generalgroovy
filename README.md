@@ -18,6 +18,16 @@ npm install
 npm start
 ```
 
+## GitHub Pages
+
+The project is ready for GitHub Pages as a static site. The included workflow publishes the repository root, so the live URL will be:
+
+```text
+https://generalgroovy.github.io/generalgroovy/
+```
+
+In the GitHub repository, set **Settings -> Pages -> Source** to **GitHub Actions** if it is not already selected.
+
 ## Test
 
 ```bash
