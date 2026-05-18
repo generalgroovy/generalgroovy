@@ -4,8 +4,11 @@ import {
   MODES,
   NOTES,
   OPTION_GROUPS,
+  RHYTHM_ALGORITHMS,
   SCALES,
+  THEORY_SYSTEMS,
   TUNINGS,
+  TRANSFORMATIONS,
   buildFretOptions,
   generatePattern,
   normalizeConfig,
@@ -34,6 +37,14 @@ const baseConfig = {
   articulation: "palm-muted",
   dynamics: "accent-every-third",
   progressionStyle: "twelve-bar",
+  theorySystem: "postTonal",
+  transformation: "inversion",
+  rhythmAlgorithm: "euclidean",
+  subdivision: 16,
+  euclideanPulses: 5,
+  polymeterSteps: 3,
+  microtonalCents: 12,
+  randomizeDepth: 7,
   chordVoicing: "sevenths",
   positionStrategy: "box",
   direction: "call-response",
@@ -48,6 +59,9 @@ const normalized = normalizeConfig(baseConfig);
 assert.equal(normalized.scale, "minorPentatonic");
 assert.equal(normalized.tuning, "dropD");
 assert.equal(normalized.difficulty, 5);
+assert.equal(normalized.theorySystem, "postTonal");
+assert.equal(normalized.transformation, "inversion");
+assert.equal(normalized.rhythmAlgorithm, "euclidean");
 
 const positions = buildFretOptions(baseConfig);
 assert.ok(positions.length > 0, "scale positions should be generated");
@@ -60,6 +74,8 @@ assert.equal(pattern.mode, "riff");
 assert.ok(pattern.notes.length >= 8, "riff should create a playable phrase");
 assert.ok(pattern.tab.includes("D|"), "tab should render selected tuning lines");
 assert.ok(pattern.chordChart.includes("twelve-bar"), "chord chart should include progression style");
+assert.ok(pattern.analysis.some((item) => item.includes("Post-tonal")), "analysis should include selected theory system");
+assert.ok(pattern.analysis.some((item) => item.includes("Inversion")), "analysis should include selected transformation");
 assert.ok(pattern.practiceLoop.length >= 5, "practice loop should contain actionable steps");
 assert.ok(pattern.variations.length >= 4, "variations should include multiple creative uses");
 assert.ok(pattern.exportText.includes("## Practice Loop"), "export should include a markdown session card");
@@ -98,13 +114,31 @@ for (const tuning of Object.keys(TUNINGS)) {
   assert.equal(generated.config.tuning, tuning, `${tuning} should normalize`);
 }
 
+for (const theorySystem of Object.keys(THEORY_SYSTEMS)) {
+  const generated = generatePattern({ ...baseConfig, theorySystem, seed: `theory-${theorySystem}` });
+  assert.equal(generated.config.theorySystem, theorySystem, `${theorySystem} should normalize`);
+  assert.ok(generated.analysis.some((item) => item.includes(THEORY_SYSTEMS[theorySystem])), `${theorySystem} should appear in analysis`);
+}
+
+for (const transformation of Object.keys(TRANSFORMATIONS)) {
+  const generated = generatePattern({ ...baseConfig, transformation, seed: `transform-${transformation}` });
+  assert.equal(generated.config.transformation, transformation, `${transformation} should normalize`);
+  assert.ok(generated.notes.every((note, index) => note.step === index), `${transformation} should keep sequential steps`);
+}
+
+for (const rhythmAlgorithm of Object.keys(RHYTHM_ALGORITHMS)) {
+  const generated = generatePattern({ ...baseConfig, rhythmAlgorithm, seed: `rhythm-${rhythmAlgorithm}` });
+  assert.equal(generated.config.rhythmAlgorithm, rhythmAlgorithm, `${rhythmAlgorithm} should normalize`);
+  assert.ok(generated.rhythm.length > 0, `${rhythmAlgorithm} should create rhythm steps`);
+}
+
 for (const feel of Object.keys(FEELS)) {
   const generated = generatePattern({ ...baseConfig, feel, seed: `feel-${feel}` });
   assert.equal(generated.config.feel, feel, `${feel} should normalize`);
   assert.ok(generated.rhythm.length > 0, `${feel} should create rhythm`);
 }
 
-for (const key of ["picking", "articulation", "dynamics", "sequence", "positionStrategy", "progressionStyle", "chordVoicing", "learningGoal"]) {
+for (const key of ["picking", "articulation", "dynamics", "sequence", "positionStrategy", "progressionStyle", "chordVoicing", "learningGoal", "tone"]) {
   assert.ok(OPTION_GROUPS[key].length >= 5, `${key} should expose a useful option range`);
 }
 

@@ -14,6 +14,8 @@
           <h1>Guitar and music theory practice lab</h1>
         </div>
         <div class="top-actions">
+          <button id="playBtn" type="button">Play</button>
+          <button id="stopBtn" type="button">Stop</button>
           <button id="copyExportBtn" type="button">Copy Session</button>
           <button id="randomizeBtn" type="button">Surprise</button>
           <button class="primary" id="generateBtn" type="button">Generate</button>
@@ -40,6 +42,21 @@
             </div>
             <div class="grid-2">
               <div class="control-group">
+                <label for="randomizeDepth">Random depth <span id="randomizeDepthLabel">5</span></label>
+                <input id="randomizeDepth" type="range" min="1" max="10" value="5">
+              </div>
+              <div class="control-group">
+                <label for="playbackWave">Playback tone</label>
+                <select id="playbackWave">
+                  <option value="triangle">Triangle</option>
+                  <option value="sine">Sine</option>
+                  <option value="sawtooth">Saw</option>
+                  <option value="square">Square</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
                 <label for="difficulty">Difficulty <span id="difficultyLabel">5</span></label>
                 <input id="difficulty" type="range" min="1" max="10" value="5">
               </div>
@@ -60,6 +77,16 @@
               <div class="control-group">
                 <label for="scale">Scale / mode</label>
                 <select id="scale"></select>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="theorySystem">Theory system</label>
+                <select id="theorySystem"></select>
+              </div>
+              <div class="control-group">
+                <label for="transformation">Transform</label>
+                <select id="transformation"></select>
               </div>
             </div>
             <div class="grid-2">
@@ -152,6 +179,30 @@
                 <input id="swing" type="number" min="0" max="75" value="0">
               </div>
             </div>
+            <div class="grid-3">
+              <div class="control-group">
+                <label for="rhythmAlgorithm">Algorithm</label>
+                <select id="rhythmAlgorithm"></select>
+              </div>
+              <div class="control-group">
+                <label for="subdivision">Steps</label>
+                <input id="subdivision" type="number" min="1" max="32" value="8">
+              </div>
+              <div class="control-group">
+                <label for="euclideanPulses">Pulses</label>
+                <input id="euclideanPulses" type="number" min="1" max="32" value="5">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="polymeterSteps">Poly step</label>
+                <input id="polymeterSteps" type="number" min="2" max="17" value="3">
+              </div>
+              <div class="control-group">
+                <label for="microtonalCents">Cent offset</label>
+                <input id="microtonalCents" type="number" min="-50" max="50" value="0">
+              </div>
+            </div>
             <div class="control-group">
               <label for="restRate">Rests <span id="restRateLabel">10</span>%</label>
               <input id="restRate" type="range" min="0" max="60" value="10">
@@ -186,6 +237,15 @@
               <label><input id="includeTechnique" type="checkbox" checked> Technique</label>
             </div>
           </details>
+
+          <details>
+            <summary>Randomization locks</summary>
+            <div class="lock-actions">
+              <button id="lockAllBtn" type="button">Lock All</button>
+              <button id="unlockAllBtn" type="button">Unlock All</button>
+            </div>
+            <div class="lock-grid" id="lockGrid"></div>
+          </details>
         </aside>
 
         <section class="practice-panel" aria-live="polite">
@@ -203,6 +263,7 @@
 
           <nav class="view-tabs" aria-label="Output views">
             <button class="active" data-view="overview" type="button">Overview</button>
+            <button data-view="playback" type="button">Playback</button>
             <button data-view="tab" type="button">Tab</button>
             <button data-view="neck" type="button">Neck</button>
             <button data-view="routine" type="button">Routine</button>
@@ -225,6 +286,22 @@
                 <ul class="analysis-list" id="analysisList"></ul>
               </section>
             </div>
+          </section>
+
+          <section class="view" id="view-playback">
+            <section class="output-section">
+              <div class="section-head">
+                <h3>Playback sequencer</h3>
+                <span id="playbackStatus">Stopped</span>
+              </div>
+              <div class="transport-panel">
+                <button class="primary" id="playInlineBtn" type="button">Play</button>
+                <button id="stopInlineBtn" type="button">Stop</button>
+                <label>Volume <input id="playbackVolume" type="range" min="0" max="100" value="42"></label>
+                <label>Loop <input id="playbackLoop" type="checkbox" checked></label>
+              </div>
+              <div class="step-lane" id="stepLane"></div>
+            </section>
           </section>
 
           <section class="view" id="view-tab">

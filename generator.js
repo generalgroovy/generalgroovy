@@ -66,6 +66,64 @@ export const TUNINGS = {
       { name: "E", midi: 40 },
       { name: "B", midi: 35 }
     ]
+  },
+  sevenString: {
+    label: "7-string standard",
+    strings: [
+      { name: "e", midi: 64 },
+      { name: "B", midi: 59 },
+      { name: "G", midi: 55 },
+      { name: "D", midi: 50 },
+      { name: "A", midi: 45 },
+      { name: "E", midi: 40 },
+      { name: "B", midi: 35 }
+    ]
+  },
+  eightString: {
+    label: "8-string F#",
+    strings: [
+      { name: "e", midi: 64 },
+      { name: "B", midi: 59 },
+      { name: "G", midi: 55 },
+      { name: "D", midi: 50 },
+      { name: "A", midi: 45 },
+      { name: "E", midi: 40 },
+      { name: "B", midi: 35 },
+      { name: "F#", midi: 30 }
+    ]
+  },
+  openD: {
+    label: "Open D",
+    strings: [
+      { name: "D", midi: 62 },
+      { name: "A", midi: 57 },
+      { name: "F#", midi: 54 },
+      { name: "D", midi: 50 },
+      { name: "A", midi: 45 },
+      { name: "D", midi: 38 }
+    ]
+  },
+  nashville: {
+    label: "Nashville high-strung",
+    strings: [
+      { name: "e", midi: 64 },
+      { name: "B", midi: 59 },
+      { name: "G", midi: 67 },
+      { name: "D", midi: 62 },
+      { name: "A", midi: 57 },
+      { name: "E", midi: 52 }
+    ]
+  },
+  newStandard: {
+    label: "New standard",
+    strings: [
+      { name: "G", midi: 67 },
+      { name: "E", midi: 64 },
+      { name: "A", midi: 57 },
+      { name: "D", midi: 50 },
+      { name: "G", midi: 43 },
+      { name: "C", midi: 36 }
+    ]
   }
 };
 
@@ -89,7 +147,23 @@ export const SCALES = {
   diminished: { label: "Diminished", intervals: [0, 2, 3, 5, 6, 8, 9, 11] },
   altered: { label: "Altered dominant", intervals: [0, 1, 3, 4, 6, 8, 10] },
   doubleHarmonic: { label: "Double harmonic", intervals: [0, 1, 4, 5, 7, 8, 11] },
-  japanese: { label: "Japanese Hirajoshi", intervals: [0, 2, 3, 7, 8] }
+  japanese: { label: "Japanese Hirajoshi", intervals: [0, 2, 3, 7, 8] },
+  inSen: { label: "In sen", intervals: [0, 1, 5, 7, 10] },
+  iwato: { label: "Iwato", intervals: [0, 1, 5, 6, 10] },
+  persian: { label: "Persian", intervals: [0, 1, 4, 5, 6, 8, 11] },
+  enigmatic: { label: "Enigmatic", intervals: [0, 1, 4, 6, 8, 10, 11] },
+  neapolitanMinor: { label: "Neapolitan minor", intervals: [0, 1, 3, 5, 7, 8, 11] },
+  hungarianMinor: { label: "Hungarian minor", intervals: [0, 2, 3, 6, 7, 8, 11] },
+  prometheus: { label: "Prometheus", intervals: [0, 2, 4, 6, 9, 10] },
+  tritone: { label: "Tritone", intervals: [0, 1, 4, 6, 7, 10] },
+  messiaen3: { label: "Messiaen mode 3", intervals: [0, 2, 3, 4, 6, 7, 8, 10, 11] },
+  messiaen4: { label: "Messiaen mode 4", intervals: [0, 1, 2, 5, 6, 7, 8, 11] },
+  lydianDominant: { label: "Lydian dominant", intervals: [0, 2, 4, 6, 7, 9, 10] },
+  majorBebop: { label: "Major bebop", intervals: [0, 2, 4, 5, 7, 8, 9, 11] },
+  dominantBebop: { label: "Dominant bebop", intervals: [0, 2, 4, 5, 7, 9, 10, 11] },
+  minorSixDiminished: { label: "Minor 6 diminished", intervals: [0, 2, 3, 5, 7, 8, 9, 11] },
+  allIntervalTetrachord: { label: "All-interval tetrachord", intervals: [0, 1, 4, 6] },
+  hexatonicPole: { label: "Hexatonic pole", intervals: [0, 3, 4, 7, 8, 11] }
 };
 
 export const MODES = {
@@ -108,6 +182,48 @@ export const MODES = {
   songwriting: "Songwriting"
 };
 
+export const THEORY_SYSTEMS = {
+  tonal: "Functional tonal",
+  modal: "Modal center",
+  blues: "Blues language",
+  jazz: "Jazz chord-scale",
+  postTonal: "Post-tonal set theory",
+  serial: "Serial row",
+  negativeHarmony: "Negative harmony",
+  neoRiemannian: "Neo-Riemannian transforms",
+  axis: "Bartok axis",
+  spectral: "Spectral approximation",
+  polymodal: "Polymodal chromaticism",
+  microtonal: "Microtonal approximation",
+  mathematical: "Mathematical pattern"
+};
+
+export const TRANSFORMATIONS = {
+  none: "None",
+  inversion: "Inversion",
+  retrograde: "Retrograde",
+  retrogradeInversion: "Retrograde inversion",
+  negative: "Negative harmony",
+  parallel: "Parallel shift",
+  relative: "Relative shift",
+  leadingToneExchange: "Leading-tone exchange",
+  chromaticPlaning: "Chromatic planing",
+  augmentation: "Rhythmic augmentation",
+  diminution: "Rhythmic diminution",
+  rotation: "Pitch rotation"
+};
+
+export const RHYTHM_ALGORITHMS = {
+  grid: "Grid",
+  euclidean: "Euclidean",
+  clave: "Clave",
+  polymeter: "Polymeter",
+  isorhythm: "Isorhythm",
+  additive: "Additive",
+  stochastic: "Stochastic",
+  silence: "Space study"
+};
+
 export const FEELS = {
   straight8: { label: "Straight eighths", pulses: ["1", "&", "2", "&", "3", "&", "4", "&"], slotsPerBar: 8 },
   straight16: { label: "Sixteenth grid", pulses: ["1e", "&a", "2e", "&a", "3e", "&a", "4e", "&a"], slotsPerBar: 16 },
@@ -121,37 +237,53 @@ export const FEELS = {
 };
 
 export const OPTION_GROUPS = {
-  tone: ["clean", "edge-of-breakup", "crunch", "high-gain", "acoustic", "nylon", "bass"],
+  tone: ["clean", "edge-of-breakup", "crunch", "high-gain", "acoustic", "nylon", "bass", "synth-like", "prepared", "ambient"],
   picking: ["alternate", "economy", "downstrokes", "upstroke-accent", "hybrid", "fingerstyle", "sweep", "tremolo"],
   articulation: ["let-ring", "staccato", "palm-muted", "legato", "slides", "hammer-ons", "pull-offs", "bends", "vibrato", "harmonics"],
   dynamics: ["even", "accent-downbeats", "accent-backbeat", "accent-every-third", "crescendo", "question-answer"],
   sequence: ["linear", "ascending", "descending", "inside-out", "outside-in", "thirds", "fourths", "triads", "enclosure", "pedal-tone", "call-response"],
   positionStrategy: ["box", "diagonal", "one-string", "three-notes-per-string", "caged", "open-position", "wide-interval"],
-  progressionStyle: ["diatonic", "ii-V-I", "I-V-vi-IV", "twelve-bar", "modal-vamp", "circle-of-fifths", "minor-cadence", "secondary-dominants", "chromatic-mediants"],
+  progressionStyle: ["diatonic", "ii-V-I", "I-V-vi-IV", "twelve-bar", "modal-vamp", "circle-of-fifths", "minor-cadence", "secondary-dominants", "chromatic-mediants", "coltrane-cycle", "axis-cycle", "constant-structure", "set-class-cycle"],
   chordVoicing: ["triads", "sevenths", "shells", "drop-2", "quartal", "sus", "add9", "spread-triads", "power-chords", "open-strings"],
-  learningGoal: ["speed", "timing", "accuracy", "fretboard", "ear", "harmony", "songwriting", "improvisation", "reading", "technique"]
+  learningGoal: ["speed", "timing", "accuracy", "fretboard", "ear", "harmony", "songwriting", "improvisation", "reading", "technique", "composition", "odd-meter", "outside-playing", "voice-leading"]
 };
 
 const DEGREE_NAMES = ["1", "b2", "2", "b3", "3", "4", "b5", "5", "#5", "6", "b7", "7"];
 const ROMAN_BY_SCALE = {
-  major: ["I", "ii", "iii", "IV", "V", "vi", "viiø"],
-  naturalMinor: ["i", "iiø", "III", "iv", "v", "VI", "VII"],
-  harmonicMinor: ["i", "iiø", "III+", "iv", "V", "VI", "vii°"],
-  melodicMinor: ["i", "ii", "III+", "IV", "V", "viø", "viiø"],
-  dorian: ["i", "ii", "bIII", "IV", "v", "viø", "bVII"],
-  phrygian: ["i", "bII", "bIII", "iv", "vø", "bVI", "bvii"],
-  lydian: ["I", "II", "iii", "#ivø", "V", "vi", "vii"],
-  mixolydian: ["I", "ii", "iiiø", "IV", "v", "vi", "bVII"],
-  locrian: ["iø", "bII", "biii", "iv", "bV", "bVI", "bvii"],
+  major: ["I", "ii", "iii", "IV", "V", "vi", "vii half-dim"],
+  naturalMinor: ["i", "ii half-dim", "III", "iv", "v", "VI", "VII"],
+  harmonicMinor: ["i", "ii half-dim", "III+", "iv", "V", "VI", "vii dim"],
+  melodicMinor: ["i", "ii", "III+", "IV", "V", "vi half-dim", "vii half-dim"],
+  dorian: ["i", "ii", "bIII", "IV", "v", "vi half-dim", "bVII"],
+  phrygian: ["i", "bII", "bIII", "iv", "v half-dim", "bVI", "bvii"],
+  lydian: ["I", "II", "iii", "#iv half-dim", "V", "vi", "vii"],
+  mixolydian: ["I", "ii", "iii half-dim", "IV", "v", "vi", "bVII"],
+  locrian: ["i half-dim", "bII", "biii", "iv", "bV", "bVI", "bvii"],
   minorPentatonic: ["i", "bIII", "IV", "v", "bVII"],
   majorPentatonic: ["I", "ii", "iii", "V", "vi"],
   blues: ["I7", "bIII", "IV7", "bV", "V7", "bVII"],
   chromatic: ["I", "bII", "II", "bIII", "III", "IV", "bV", "V", "bVI", "VI", "bVII", "VII"],
   wholeTone: ["I+", "II+", "III+", "#IV+", "#V+", "bVII+"],
-  diminished: ["I°", "II°", "bIII°", "IV°", "bV°", "bVI°", "VI°", "VII°"],
+  diminished: ["I dim", "II dim", "bIII dim", "IV dim", "bV dim", "bVI dim", "VI dim", "VII dim"],
   altered: ["I7alt", "b9", "#9", "3", "#11", "b13", "b7"],
   doubleHarmonic: ["I", "bII", "III", "iv", "V", "bVI", "VII"],
-  japanese: ["I", "II", "bIII", "V", "bVI"]
+  japanese: ["I", "II", "bIII", "V", "bVI"],
+  inSen: ["I", "bII", "IV", "V", "bVII"],
+  iwato: ["I", "bII", "IV", "bV", "bVII"],
+  persian: ["I", "bII", "III", "IV", "bV", "bVI", "VII"],
+  enigmatic: ["I", "bII", "III", "#IV", "#V", "bVII", "VII"],
+  neapolitanMinor: ["i", "bII", "bIII", "iv", "V", "bVI", "VII"],
+  hungarianMinor: ["i", "ii", "bIII", "#IV", "V", "bVI", "VII"],
+  prometheus: ["I", "II", "III", "#IV", "VI", "bVII"],
+  tritone: ["I", "bII", "III", "bV", "V", "bVII"],
+  messiaen3: ["M3-1", "M3-2", "M3-3", "M3-4", "M3-5", "M3-6", "M3-7", "M3-8", "M3-9"],
+  messiaen4: ["M4-1", "M4-2", "M4-3", "M4-4", "M4-5", "M4-6", "M4-7", "M4-8"],
+  lydianDominant: ["I7#11", "II", "iii", "#iv half-dim", "V", "vi", "bVII"],
+  majorBebop: ["I", "ii", "iii", "IV", "V", "#Vdim", "vi", "vii"],
+  dominantBebop: ["I7", "ii", "iii", "IV", "V", "vi", "bVII", "VII"],
+  minorSixDiminished: ["i", "ii half-dim", "bIII", "iv", "V", "bVI", "VI", "VII"],
+  allIntervalTetrachord: ["0", "1", "4", "6"],
+  hexatonicPole: ["I", "bIII", "III", "V", "#V", "VII"]
 };
 
 const MODE_TITLE = {
@@ -239,13 +371,16 @@ export function generatePattern(config = {}) {
   const fretOptions = buildFretOptions(normalized);
   const progression = makeProgression(normalized, rand);
   const noteCount = phraseLength(normalized, mode);
-  const notes = makeNotes(mode, normalized, fretOptions, noteCount, rand);
-  const rhythm = makeRhythm(normalized, noteCount, rand);
+  const rawNotes = makeNotes(mode, normalized, fretOptions, noteCount, rand);
+  const notes = applyTransformation(rawNotes, normalized);
+  const rhythm = makeRhythm(normalized, Math.max(noteCount, notes.length), rand);
   const techniques = makeTechniqueStack(mode, normalized, rand);
   const title = `${normalized.key} ${SCALES[normalized.scale].label} ${pick(MODE_TITLE[mode] || MODE_TITLE.mixed, rand)}`;
   const tab = renderTab(notes, normalized, rhythm);
   const chordChart = renderChordChart(progression, normalized);
-  const analysis = makeAnalysis(mode, normalized, notes, progression, techniques);
+  const analysis = normalized.includeTheory
+    ? makeAnalysis(mode, normalized, notes, progression, techniques)
+    : [`Theory analysis disabled. Focus on ${MODES[mode]}, timing, and tone.`];
   const fretboard = makeFretboardSummary(normalized, notes);
   const practiceLoop = makePracticeLoop(normalized, mode, techniques, progression);
   const variations = makeVariations(mode, normalized, progression, techniques, rand);
@@ -302,6 +437,14 @@ export function normalizeConfig(config = {}) {
     meter: String(config.meter || (config.feel === "oddFive" ? "5/4" : config.feel === "oddSeven" ? "7/8" : "4/4")),
     swing: clamp(Number(config.swing ?? 0), 0, 75),
     restRate: clamp(Number(config.restRate ?? 10), 0, 60),
+    subdivision: clamp(Number(config.subdivision ?? 8), 1, 32),
+    euclideanPulses: clamp(Number(config.euclideanPulses ?? 5), 1, 32),
+    polymeterSteps: clamp(Number(config.polymeterSteps ?? 3), 2, 17),
+    microtonalCents: clamp(Number(config.microtonalCents ?? 0), -50, 50),
+    randomizeDepth: clamp(Number(config.randomizeDepth ?? 5), 1, 10),
+    theorySystem: optionKey(config.theorySystem, THEORY_SYSTEMS, "tonal"),
+    transformation: optionKey(config.transformation, TRANSFORMATIONS, "none"),
+    rhythmAlgorithm: optionKey(config.rhythmAlgorithm, RHYTHM_ALGORITHMS, "grid"),
     direction: option(config.direction, OPTION_GROUPS.sequence, "linear"),
     positionStrategy: option(config.positionStrategy, OPTION_GROUPS.positionStrategy, "box"),
     picking: option(config.picking, OPTION_GROUPS.picking, "alternate"),
@@ -384,12 +527,45 @@ function generateFretboardSurvey(config, fretOptions) {
     .map((note, step) => decorateNote(note, step, config, note.isRoot));
 }
 
+function applyTransformation(notes, config) {
+  if (!notes.length || config.transformation === "none") return notes;
+  const root = NOTES.indexOf(config.key);
+  let transformed = [...notes];
+  if (config.transformation === "retrograde") transformed = transformed.reverse();
+  if (config.transformation === "inversion" || config.transformation === "retrogradeInversion") {
+    transformed = transformed.map((note) => transposeNoteLabel(note, (root - (note.pitch - root) + 24) % 12));
+    if (config.transformation === "retrogradeInversion") transformed = transformed.reverse();
+  }
+  if (config.transformation === "negative") {
+    transformed = transformed.map((note) => transposeNoteLabel(note, (root + 7 - (note.pitch - root) + 24) % 12));
+  }
+  if (config.transformation === "parallel") transformed = transformed.map((note) => transposeNoteLabel(note, note.pitch + 3));
+  if (config.transformation === "relative") transformed = transformed.map((note) => transposeNoteLabel(note, note.pitch + 9));
+  if (config.transformation === "leadingToneExchange") transformed = transformed.map((note, index) => index % 2 ? transposeNoteLabel(note, note.pitch + 1) : note);
+  if (config.transformation === "chromaticPlaning") transformed = transformed.map((note, index) => transposeNoteLabel(note, note.pitch + (index % 4)));
+  if (config.transformation === "rotation") transformed = transformed.map((note, index, source) => source[(index + config.euclideanPulses) % source.length]);
+  return transformed.map((note, step) => ({ ...note, step }));
+}
+
+function transposeNoteLabel(note, pitch) {
+  const normalizedPitch = ((pitch % 12) + 12) % 12;
+  return {
+    ...note,
+    pitch: normalizedPitch,
+    note: NOTES[normalizedPitch],
+    midi: note.midi + (((normalizedPitch - note.pitch + 18) % 12) - 6),
+    interval: normalizedPitch
+  };
+}
+
 function makeRhythm(config, noteCount, rand) {
   const feel = FEELS[config.feel];
+  const activeSteps = rhythmStepSet(config, noteCount, rand);
   const rhythm = [];
   for (let step = 0; step < noteCount; step += 1) {
     const pulse = feel.pulses[step % feel.pulses.length];
-    const rest = rand() * 100 < config.restRate && step % feel.pulses.length !== 0;
+    const algorithmRest = !activeSteps.has(step % Math.max(1, config.subdivision));
+    const rest = algorithmRest || (rand() * 100 < config.restRate && step % feel.pulses.length !== 0);
     rhythm.push({
       step,
       pulse,
@@ -399,6 +575,37 @@ function makeRhythm(config, noteCount, rand) {
     });
   }
   return rhythm;
+}
+
+function rhythmStepSet(config, noteCount, rand) {
+  const steps = Math.max(1, config.subdivision);
+  if (config.rhythmAlgorithm === "euclidean") return euclideanSet(config.euclideanPulses, steps);
+  if (config.rhythmAlgorithm === "clave") return new Set([0, 3, 6, 10, 12].map((step) => step % steps));
+  if (config.rhythmAlgorithm === "polymeter") return new Set(Array.from({ length: steps }, (_, step) => step).filter((step) => step % config.polymeterSteps === 0 || step % 4 === 0));
+  if (config.rhythmAlgorithm === "isorhythm") return new Set(Array.from({ length: steps }, (_, step) => step).filter((step) => [0, 2, 5, 7, 11].includes(step % 13)));
+  if (config.rhythmAlgorithm === "additive") return new Set(additiveSteps([3, 2, 3, 4, 2], steps));
+  if (config.rhythmAlgorithm === "stochastic") return new Set(Array.from({ length: steps }, (_, step) => step).filter(() => rand() > 0.35));
+  if (config.rhythmAlgorithm === "silence") return new Set([0, Math.floor(steps / 2)]);
+  return new Set(Array.from({ length: Math.max(steps, noteCount) }, (_, step) => step % steps));
+}
+
+function euclideanSet(pulses, steps) {
+  const set = new Set();
+  const safePulses = Math.min(pulses, steps);
+  for (let i = 0; i < steps; i += 1) {
+    if ((i * safePulses) % steps < safePulses) set.add(i);
+  }
+  return set;
+}
+
+function additiveSteps(groups, steps) {
+  const result = [];
+  let cursor = 0;
+  while (cursor < steps) {
+    result.push(cursor);
+    cursor += groups[result.length % groups.length];
+  }
+  return result;
 }
 
 function makeTechniqueStack(mode, config, rand) {
@@ -427,7 +634,11 @@ function makeProgression(config, rand) {
     "circle-of-fifths": [5, 1, 4, 0],
     "minor-cadence": [0, 3, 4, 0],
     "secondary-dominants": [0, 2, 5, 1, 4, 0],
-    "chromatic-mediants": [0, 2, 5, 0]
+    "chromatic-mediants": [0, 2, 5, 0],
+    "coltrane-cycle": [0, 2, 4, 6],
+    "axis-cycle": [0, 3, 6, 4],
+    "constant-structure": [0, 2, 4, 6, 8],
+    "set-class-cycle": [0, 1, 4, 6]
   };
   const template = templates[config.progressionStyle] || templates.diatonic;
   const length = config.includeChords ? Math.min(template.length, Math.max(2, config.bars)) : 2;
@@ -474,14 +685,22 @@ function renderChordChart(progression, config) {
 
 function makeAnalysis(mode, config, notes, progression, techniques) {
   const uniqueDegrees = unique(notes.map((note) => note.degreeName).filter(Boolean));
+  const pitchClasses = unique(notes.map((note) => note.pitch).filter((pitch) => Number.isInteger(pitch))).sort((a, b) => a - b);
   return [
     `Mode: ${MODES[mode]} with ${config.learningGoal} as the primary goal.`,
-    `Theory: ${config.key} ${SCALES[config.scale].label}; target degrees ${uniqueDegrees.join(", ") || "none in range"}.`,
+    `Theory: ${THEORY_SYSTEMS[config.theorySystem]}; ${config.key} ${SCALES[config.scale].label}; target degrees ${uniqueDegrees.join(", ") || "none in range"}.`,
+    `Pitch math: set ${formatSetClass(pitchClasses)}, transformation ${TRANSFORMATIONS[config.transformation]}, micro offset ${config.microtonalCents} cents.`,
     `Range: ${getTuning(config.tuning).label}, capo ${config.capo}, strings ${stringNames(config).join(" ")}, frets ${config.fretStart}-${Math.min(config.maxFrets, config.fretStart + config.fretSpan)}.`,
-    `Rhythm: ${FEELS[config.feel].label}, ${config.meter}, ${config.swing}% swing, ${config.restRate}% rest probability.`,
+    `Rhythm: ${RHYTHM_ALGORITHMS[config.rhythmAlgorithm]}, ${FEELS[config.feel].label}, ${config.meter}, ${config.swing}% swing, ${config.restRate}% rest probability.`,
     `Harmony: ${progression.map((item) => item.chord).join(" - ")}.`,
     `Technique: ${techniques.join(", ") || "neutral execution"}.`
   ];
+}
+
+function formatSetClass(pitchClasses) {
+  if (!pitchClasses.length) return "{}";
+  const primeLike = pitchClasses.map((pitch) => (pitch - pitchClasses[0] + 12) % 12).sort((a, b) => a - b);
+  return `{${pitchClasses.join(",")}} / normal-ish {${primeLike.join(",")}}`;
 }
 
 function makeFretboardSummary(config, notes) {
@@ -515,7 +734,9 @@ function makeVariations(mode, config, progression, techniques, rand) {
     `Move the entire idea through ${config.positionStrategy} positions without changing string set.`,
     `Invert the contour, keep ${config.picking} picking, and preserve the accents.`,
     `Turn the last two beats into a question-answer phrase using ${config.articulation}.`,
-    `Write a second part that starts on beat 2 and resolves to ${config.key}.`
+    `Write a second part that starts on beat 2 and resolves to ${config.key}.`,
+    `Apply ${TRANSFORMATIONS[config.transformation]} to the phrase, then compare the emotional gravity.`,
+    `Keep the frets but reinterpret them as ${THEORY_SYSTEMS[config.theorySystem]} material.`
   ];
   if (mode === "ear") ideas.unshift("Sing each note name, then each scale degree, then play without looking.");
   if (mode === "songwriting") ideas.unshift("Name the generated cell as verse, pre-chorus, chorus, or fill, then create a contrasting role.");
@@ -528,7 +749,7 @@ function renderExport({ normalized, mode, title, progression, tab, chordChart, a
     `# ${title}`,
     "",
     `Focus: ${MODES[mode]}`,
-    `Config: ${normalized.key} ${SCALES[normalized.scale].label}, ${getTuning(normalized.tuning).label}, ${normalized.meter}, ${normalized.tempo} BPM`,
+    `Config: ${normalized.key} ${SCALES[normalized.scale].label}, ${THEORY_SYSTEMS[normalized.theorySystem]}, ${getTuning(normalized.tuning).label}, ${normalized.meter}, ${normalized.tempo} BPM`,
     "",
     "## Chord Chart",
     chordChart,
@@ -630,6 +851,10 @@ function stringNames(config) {
 
 function option(value, allowed, fallback) {
   return allowed.includes(value) ? value : fallback;
+}
+
+function optionKey(value, allowed, fallback) {
+  return Object.prototype.hasOwnProperty.call(allowed, value) ? value : fallback;
 }
 
 function pick(items, rand) {
