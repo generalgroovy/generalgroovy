@@ -7,11 +7,17 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div class="backdrop-grid" aria-hidden="true"></div>
     <main class="app-shell">
       <header class="topbar">
         <div>
           <p class="eyebrow">GeneralGroovy</p>
           <h1>Guitar and music theory practice lab</h1>
+          <div class="status-strip" aria-label="Current session summary">
+            <span id="statusFocus">Mixed session</span>
+            <span id="statusTheory">A minor pentatonic</span>
+            <span id="statusRhythm">Straight eighths</span>
+          </div>
         </div>
         <div class="top-actions">
           <button id="playBtn" type="button">Play</button>
@@ -24,6 +30,19 @@
 
       <section class="workspace">
         <aside class="controls" aria-label="Practice controls">
+          <div class="control-command">
+            <input id="controlSearch" type="text" placeholder="Filter controls">
+            <div class="mini-actions">
+              <button id="expandAllBtn" type="button">Expand</button>
+              <button id="collapseAllBtn" type="button">Fold</button>
+            </div>
+          </div>
+          <div class="preset-row" aria-label="Practice presets">
+            <button data-preset="daily" type="button">Daily</button>
+            <button data-preset="outside" type="button">Outside</button>
+            <button data-preset="composer" type="button">Composer</button>
+          </div>
+
           <details open>
             <summary>Session</summary>
             <div class="control-group">
@@ -254,6 +273,11 @@
               <p class="eyebrow" id="patternType">Pattern</p>
               <h2 id="patternTitle">Generate a practice session</h2>
               <p class="warning" id="warning"></p>
+              <div class="hero-metrics">
+                <span id="metricSystem">Functional tonal</span>
+                <span id="metricTransform">No transform</span>
+                <span id="metricTuning">Standard</span>
+              </div>
             </div>
             <div class="tempo-card">
               <span id="tempoOut">92</span>
@@ -269,6 +293,13 @@
             <button data-view="routine" type="button">Routine</button>
             <button data-view="export" type="button">Export</button>
           </nav>
+
+          <div class="interaction-rail" aria-label="Interactive controls">
+            <button id="railPlayBtn" type="button">Play sequence</button>
+            <button id="railMutateBtn" type="button">Mutate unlocked</button>
+            <button id="railLockBtn" type="button">Lock current</button>
+            <button id="railUnlockBtn" type="button">Unlock all</button>
+          </div>
 
           <section class="view active" id="view-overview">
             <div class="meta-grid" id="metaGrid"></div>

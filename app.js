@@ -31,6 +31,12 @@ const outputs = {
   patternType: $("#patternType"),
   patternTitle: $("#patternTitle"),
   warning: $("#warning"),
+  statusFocus: $("#statusFocus"),
+  statusTheory: $("#statusTheory"),
+  statusRhythm: $("#statusRhythm"),
+  metricSystem: $("#metricSystem"),
+  metricTransform: $("#metricTransform"),
+  metricTuning: $("#metricTuning"),
   tempoOut: $("#tempoOut"),
   metaGrid: $("#metaGrid"),
   chordChart: $("#chordChart"),
@@ -107,10 +113,20 @@ function wireEvents() {
   $("#copyExportInlineBtn").addEventListener("click", () => copyText(lastPattern?.exportText || "", $("#copyExportInlineBtn"), "Copy"));
   $("#playBtn").addEventListener("click", playPattern);
   $("#playInlineBtn").addEventListener("click", playPattern);
+  $("#railPlayBtn").addEventListener("click", playPattern);
   $("#stopBtn").addEventListener("click", stopPlayback);
   $("#stopInlineBtn").addEventListener("click", stopPlayback);
   $("#lockAllBtn").addEventListener("click", () => setAllLocks(true));
   $("#unlockAllBtn").addEventListener("click", () => setAllLocks(false));
+  $("#railLockBtn").addEventListener("click", () => setAllLocks(true));
+  $("#railUnlockBtn").addEventListener("click", () => setAllLocks(false));
+  $("#railMutateBtn").addEventListener("click", surprise);
+  $("#expandAllBtn").addEventListener("click", () => setDetailsOpen(true));
+  $("#collapseAllBtn").addEventListener("click", () => setDetailsOpen(false));
+  $("#controlSearch").addEventListener("input", filterControls);
+  document.querySelectorAll("[data-preset]").forEach((button) => {
+    button.addEventListener("click", () => applyPreset(button.dataset.preset));
+  });
 
   controls.tuning.addEventListener("change", () => {
     renderStringPicker();
@@ -194,6 +210,12 @@ function render() {
   outputs.patternType.textContent = pattern.typeLabel;
   outputs.patternTitle.textContent = pattern.title;
   outputs.warning.textContent = pattern.warning;
+  outputs.statusFocus.textContent = pattern.typeLabel;
+  outputs.statusTheory.textContent = `${pattern.config.key} ${SCALES[pattern.config.scale].label}`;
+  outputs.statusRhythm.textContent = `${FEELS[pattern.config.feel].label} / ${pattern.config.meter}`;
+  outputs.metricSystem.textContent = THEORY_SYSTEMS[pattern.config.theorySystem];
+  outputs.metricTransform.textContent = TRANSFORMATIONS[pattern.config.transformation];
+  outputs.metricTuning.textContent = TUNINGS[pattern.config.tuning].label;
   outputs.tempoOut.textContent = pattern.config.tempo;
   outputs.positionLabel.textContent = pattern.positionLabel;
   outputs.tabOutput.textContent = pattern.tab;
@@ -295,6 +317,49 @@ function setAllLocks(locked) {
   document.querySelectorAll("[data-lock]").forEach((input) => {
     input.checked = locked;
   });
+}
+
+function setDetailsOpen(open) {
+  document.querySelectorAll(".controls details").forEach((details) => {
+    details.open = open;
+  });
+}
+
+function filterControls() {
+  const query = $("#controlSearch").value.trim().toLowerCase();
+  document.querySelectorAll(".controls details").forEach((details) => {
+    const matches = !query || details.textContent.toLowerCase().includes(query);
+    details.hidden = !matches;
+    if (query && matches) details.open = true;
+  });
+}
+
+function applyPreset(preset) {
+  const presets = {
+    daily: {
+      mode: "mixed", learningGoal: "timing", scale: "minorPentatonic", theorySystem: "tonal",
+      transformation: "none", rhythmAlgorithm: "grid", picking: "alternate", articulation: "let-ring",
+      dynamics: "accent-downbeats", tone: "clean", tempo: 92, bars: 4, density: 5, difficulty: 5
+    },
+    outside: {
+      mode: "riff", learningGoal: "outside-playing", scale: "altered", theorySystem: "postTonal",
+      transformation: "retrogradeInversion", progressionStyle: "chromatic-mediants",
+      rhythmAlgorithm: "euclidean", subdivision: 16, euclideanPulses: 7, articulation: "slides",
+      dynamics: "question-answer", tone: "edge-of-breakup", tempo: 118, density: 8, difficulty: 8
+    },
+    composer: {
+      mode: "songwriting", learningGoal: "composition", scale: "allIntervalTetrachord",
+      theorySystem: "mathematical", transformation: "rotation", progressionStyle: "set-class-cycle",
+      rhythmAlgorithm: "isorhythm", chordVoicing: "quartal", tone: "ambient", tempo: 76,
+      density: 6, difficulty: 7, bars: 8
+    }
+  };
+  const selected = presets[preset];
+  for (const [key, value] of Object.entries(selected)) {
+    if (controls[key] && !isLocked(key)) controls[key].value = value;
+  }
+  generationSeed = String(Date.now() + Math.random());
+  render();
 }
 
 function surprise() {
