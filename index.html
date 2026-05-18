@@ -11,102 +11,189 @@
       <header class="topbar">
         <div>
           <p class="eyebrow">GeneralGroovy</p>
-          <h1>Guitar practice pattern generator</h1>
+          <h1>Guitar and music theory practice lab</h1>
         </div>
-        <div class="session-pill" id="sessionPill">Fresh session</div>
+        <div class="top-actions">
+          <button id="copyExportBtn" type="button">Copy Session</button>
+          <button id="randomizeBtn" type="button">Surprise</button>
+          <button class="primary" id="generateBtn" type="button">Generate</button>
+        </div>
       </header>
 
       <section class="workspace">
         <aside class="controls" aria-label="Practice controls">
-          <div class="control-group">
-            <label for="mode">Practice focus</label>
-            <select id="mode">
-              <option value="mixed">Mixed workout</option>
-              <option value="picking">Picking patterns</option>
-              <option value="riff">Riffs and sequences</option>
-              <option value="chords">Chords and progressions</option>
-              <option value="ear">Ear-to-hands prompts</option>
-            </select>
-          </div>
-
-          <div class="grid-2">
+          <details open>
+            <summary>Session</summary>
             <div class="control-group">
-              <label for="key">Key</label>
-              <select id="key"></select>
+              <label for="mode">Practice focus</label>
+              <select id="mode"></select>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="learningGoal">Goal</label>
+                <select id="learningGoal"></select>
+              </div>
+              <div class="control-group">
+                <label for="minutes">Minutes</label>
+                <input id="minutes" type="number" min="1" max="120" value="12">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="difficulty">Difficulty <span id="difficultyLabel">5</span></label>
+                <input id="difficulty" type="range" min="1" max="10" value="5">
+              </div>
+              <div class="control-group">
+                <label for="density">Density <span id="densityLabel">5</span></label>
+                <input id="density" type="range" min="1" max="10" value="5">
+              </div>
+            </div>
+          </details>
+
+          <details open>
+            <summary>Theory</summary>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="key">Key</label>
+                <select id="key"></select>
+              </div>
+              <div class="control-group">
+                <label for="scale">Scale / mode</label>
+                <select id="scale"></select>
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="progressionStyle">Progression</label>
+                <select id="progressionStyle"></select>
+              </div>
+              <div class="control-group">
+                <label for="chordVoicing">Voicing</label>
+                <select id="chordVoicing"></select>
+              </div>
+            </div>
+          </details>
+
+          <details open>
+            <summary>Instrument and neck</summary>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="tuning">Tuning</label>
+                <select id="tuning"></select>
+              </div>
+              <div class="control-group">
+                <label for="capo">Capo</label>
+                <input id="capo" type="number" min="0" max="12" value="0">
+              </div>
             </div>
             <div class="control-group">
-              <label for="scale">Scale color</label>
-              <select id="scale">
-                <option value="minorPentatonic">Minor pentatonic</option>
-                <option value="majorPentatonic">Major pentatonic</option>
-                <option value="naturalMinor">Natural minor</option>
-                <option value="major">Major</option>
-                <option value="dorian">Dorian</option>
-                <option value="mixolydian">Mixolydian</option>
-                <option value="blues">Blues</option>
-              </select>
+              <label>Strings used</label>
+              <div class="string-picker" id="stringPicker"></div>
             </div>
-          </div>
+            <div class="grid-3">
+              <div class="control-group">
+                <label for="fretStart">Start</label>
+                <input id="fretStart" type="number" min="0" max="22" value="3">
+              </div>
+              <div class="control-group">
+                <label for="fretSpan">Span</label>
+                <input id="fretSpan" type="number" min="1" max="12" value="5">
+              </div>
+              <div class="control-group">
+                <label for="maxFrets">Max</label>
+                <input id="maxFrets" type="number" min="12" max="36" value="24">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="positionStrategy">Position</label>
+                <select id="positionStrategy"></select>
+              </div>
+              <div class="control-group">
+                <label for="direction">Shape</label>
+                <select id="direction"></select>
+              </div>
+            </div>
+            <div class="toggle-row">
+              <label><input id="allowOpenStrings" type="checkbox"> Open strings</label>
+              <label><input id="showIntervals" type="checkbox" checked> Show intervals</label>
+            </div>
+          </details>
 
-          <div class="control-group">
-            <label>Strings used</label>
-            <div class="string-picker" id="stringPicker"></div>
-          </div>
-
-          <div class="grid-2">
+          <details>
+            <summary>Rhythm</summary>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="tempo">Tempo</label>
+                <input id="tempo" type="number" min="30" max="260" value="92">
+              </div>
+              <div class="control-group">
+                <label for="tempoRamp">Ramp</label>
+                <input id="tempoRamp" type="number" min="0" max="40" value="8">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="bars">Bars</label>
+                <input id="bars" type="number" min="1" max="16" value="4">
+              </div>
+              <div class="control-group">
+                <label for="meter">Meter</label>
+                <input id="meter" type="text" value="4/4">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="feel">Feel</label>
+                <select id="feel"></select>
+              </div>
+              <div class="control-group">
+                <label for="swing">Swing %</label>
+                <input id="swing" type="number" min="0" max="75" value="0">
+              </div>
+            </div>
             <div class="control-group">
-              <label for="fretStart">Fret start</label>
-              <input id="fretStart" type="number" min="0" max="18" value="3">
+              <label for="restRate">Rests <span id="restRateLabel">10</span>%</label>
+              <input id="restRate" type="range" min="0" max="60" value="10">
             </div>
-            <div class="control-group">
-              <label for="fretSpan">Fret span</label>
-              <input id="fretSpan" type="number" min="3" max="8" value="5">
+          </details>
+
+          <details>
+            <summary>Technique and sound</summary>
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="picking">Picking</label>
+                <select id="picking"></select>
+              </div>
+              <div class="control-group">
+                <label for="articulation">Articulation</label>
+                <select id="articulation"></select>
+              </div>
             </div>
-          </div>
-
-          <div class="control-group">
-            <label for="difficulty">Difficulty <span id="difficultyLabel">3</span></label>
-            <input id="difficulty" type="range" min="1" max="5" value="3">
-          </div>
-
-          <div class="grid-2">
-            <div class="control-group">
-              <label for="tempo">Tempo</label>
-              <input id="tempo" type="number" min="45" max="220" value="92">
+            <div class="grid-2">
+              <div class="control-group">
+                <label for="dynamics">Dynamics</label>
+                <select id="dynamics"></select>
+              </div>
+              <div class="control-group">
+                <label for="tone">Tone</label>
+                <select id="tone"></select>
+              </div>
             </div>
-            <div class="control-group">
-              <label for="bars">Bars</label>
-              <input id="bars" type="number" min="1" max="8" value="4">
+            <div class="toggle-row">
+              <label><input id="includeChords" type="checkbox" checked> Harmony</label>
+              <label><input id="includeTheory" type="checkbox" checked> Analysis</label>
+              <label><input id="includeTechnique" type="checkbox" checked> Technique</label>
             </div>
-          </div>
-
-          <div class="control-group">
-            <label for="feel">Rhythm feel</label>
-            <select id="feel">
-              <option value="straight">Straight eighths</option>
-              <option value="sixteenths">Sixteenth-note grid</option>
-              <option value="triplet">Triplet pulse</option>
-              <option value="syncopated">Syncopated accents</option>
-              <option value="shuffle">Shuffle</option>
-            </select>
-          </div>
-
-          <div class="toggle-row">
-            <label><input id="includeChords" type="checkbox" checked> Chord voice leading</label>
-            <label><input id="includeTechnique" type="checkbox" checked> Technique constraint</label>
-          </div>
-
-          <div class="button-row">
-            <button class="primary" id="generateBtn" type="button">Generate</button>
-            <button id="randomizeBtn" type="button" title="Randomize constraints">Surprise</button>
-          </div>
+          </details>
         </aside>
 
         <section class="practice-panel" aria-live="polite">
           <div class="hero-strip">
             <div>
               <p class="eyebrow" id="patternType">Pattern</p>
-              <h2 id="patternTitle">Generate a practice pattern</h2>
+              <h2 id="patternTitle">Generate a practice session</h2>
+              <p class="warning" id="warning"></p>
             </div>
             <div class="tempo-card">
               <span id="tempoOut">92</span>
@@ -114,33 +201,78 @@
             </div>
           </div>
 
-          <div class="meta-grid" id="metaGrid"></div>
+          <nav class="view-tabs" aria-label="Output views">
+            <button class="active" data-view="overview" type="button">Overview</button>
+            <button data-view="tab" type="button">Tab</button>
+            <button data-view="neck" type="button">Neck</button>
+            <button data-view="routine" type="button">Routine</button>
+            <button data-view="export" type="button">Export</button>
+          </nav>
 
-          <section class="output-section">
-            <div class="section-head">
-              <h3>Tab</h3>
-              <button id="copyTabBtn" type="button">Copy</button>
+          <section class="view active" id="view-overview">
+            <div class="meta-grid" id="metaGrid"></div>
+            <div class="split-grid">
+              <section class="output-section">
+                <div class="section-head">
+                  <h3>Chord chart</h3>
+                </div>
+                <pre class="chart-output" id="chordChart"></pre>
+              </section>
+              <section class="output-section">
+                <div class="section-head">
+                  <h3>Analysis</h3>
+                </div>
+                <ul class="analysis-list" id="analysisList"></ul>
+              </section>
             </div>
-            <pre class="tab-output" id="tabOutput"></pre>
           </section>
 
-          <section class="output-section">
-            <div class="section-head">
-              <h3>Fretboard map</h3>
-              <span id="positionLabel"></span>
-            </div>
-            <div class="fretboard" id="fretboard" aria-label="Generated fretboard positions"></div>
+          <section class="view" id="view-tab">
+            <section class="output-section">
+              <div class="section-head">
+                <h3>Tab and accents</h3>
+                <button id="copyTabBtn" type="button">Copy Tab</button>
+              </div>
+              <pre class="tab-output" id="tabOutput"></pre>
+            </section>
           </section>
 
-          <section class="drill-grid">
-            <div>
-              <h3>Practice loop</h3>
-              <ol id="practiceLoop"></ol>
-            </div>
-            <div>
-              <h3>Creative variation</h3>
-              <p id="variation"></p>
-            </div>
+          <section class="view" id="view-neck">
+            <section class="output-section">
+              <div class="section-head">
+                <h3>Fretboard map</h3>
+                <span id="positionLabel"></span>
+              </div>
+              <div class="legend">
+                <span><b class="dot root"></b>Root</span>
+                <span><b class="dot active"></b>Played</span>
+                <span><b class="dot scale"></b>Scale</span>
+              </div>
+              <div class="fretboard" id="fretboard" aria-label="Generated fretboard positions"></div>
+            </section>
+          </section>
+
+          <section class="view" id="view-routine">
+            <section class="drill-grid">
+              <div>
+                <h3>Practice loop</h3>
+                <ol id="practiceLoop"></ol>
+              </div>
+              <div>
+                <h3>Variations</h3>
+                <ul id="variations"></ul>
+              </div>
+            </section>
+          </section>
+
+          <section class="view" id="view-export">
+            <section class="output-section">
+              <div class="section-head">
+                <h3>Markdown session card</h3>
+                <button id="copyExportInlineBtn" type="button">Copy</button>
+              </div>
+              <pre class="export-output" id="exportOutput"></pre>
+            </section>
           </section>
         </section>
       </section>

@@ -1,35 +1,59 @@
 # GeneralGroovy
 
-GeneralGroovy is a browser-based guitar practice generator for riffs, picking exercises, chord movement, and ear-to-hands drills.
+GeneralGroovy is a static guitar and music-theory practice lab. It generates configurable practice material for picking, riffs, chords, progressions, arpeggios, legato, sweep picking, rhythm, ear training, fretboard mapping, reading, songwriting, and mixed practice sessions.
 
-## Features
+## What It Generates
 
-- Configurable key, scale color, string set, fret window, difficulty, tempo, bar count, and rhythm feel
-- Generates tab, fretboard positions, a progression color, technical constraint, practice loop, and creative variation
-- Includes focused modes for picking, riffs, chords, ear training, or mixed daily workouts
-- Runs as a static web app with no build step
+- Guitar tab with accent and rest cues
+- Fretboard maps with roots, scale tones, played tones, and optional interval labels
+- Chord charts with harmonic function notes
+- Technique constraints for picking, articulation, dynamics, and tone
+- Practice loops with tempo ramps and timed sections
+- Creative variations for improvisation, songwriting, ear work, and fretboard transfer
+- Markdown session cards that can be copied into a practice journal
 
-## Run
+## Configuration Surface
 
-Open `index.html` in a browser, or serve the folder locally:
+GeneralGroovy is designed around practical musical categories:
+
+- **Session:** focus mode, goal, duration, difficulty, density
+- **Theory:** key, scale/mode, progression style, chord voicing
+- **Instrument:** tuning, capo, strings, fret window, max frets, open strings
+- **Neck strategy:** box, diagonal, one-string, three-notes-per-string, CAGED, open position, wide interval
+- **Rhythm:** tempo, ramp, bars, meter, feel, swing, rest probability
+- **Technique:** picking system, articulation, dynamics, tone, harmony/theory/technique toggles
+
+The app intentionally keeps all of this client-side: no build step, no server dependency, and no account required.
+
+## Run Locally
+
+Open `index.html` directly, or serve the folder:
 
 ```bash
-npm install
 npm start
+```
+
+Then visit:
+
+```text
+http://localhost:4173/
 ```
 
 ## GitHub Pages
 
-The project is ready for GitHub Pages as a static site. The included workflow publishes the repository root, so the live URL will be:
+The repository is configured for GitHub Pages through GitHub Actions. The live site is:
 
 ```text
 https://generalgroovy.github.io/generalgroovy/
 ```
 
-In the GitHub repository, set **Settings -> Pages -> Source** to **GitHub Actions** if it is not already selected.
+If Pages is ever reset, set **Settings -> Pages -> Source** to **GitHub Actions**.
 
 ## Test
 
 ```bash
-npm test
+node test.mjs
+node --check app.js
+node --check generator.js
+node --check server.mjs
 ```
