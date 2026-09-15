@@ -2,6 +2,24 @@
 
 GeneralGroovy is a static guitar and music-theory practice lab. It generates configurable practice material for picking, riffs, chords, progressions, arpeggios, legato, sweep picking, rhythm, ear training, fretboard mapping, reading, songwriting, and mixed practice sessions.
 
+## Developer and selected projects
+
+I'm **Michail Sendetskiy**, a **Java/Python software developer** at
+**WeltWeitBau since 2020**. My work spans enterprise applications, developer
+tools, and applied AI.
+
+[Portfolio](https://michail-sendetskiy.onetruepath.chatgpt.site) ·
+[LinkedIn](https://www.linkedin.com/in/michail-sendetskiy-63687a38/)
+
+| Project | What it explores | Public material |
+| --- | --- | --- |
+| [CoopNavigationSDS](https://github.com/generalgroovy/sds) | Reproducible evaluation of cooperative speech dialogue systems | Source, experiment manifests, technical documentation, and test sources |
+| [Autocode](projects/autocode.md) | A local coding agent using Python and Ollama | Case study and dated component-verification evidence; source remains private |
+| [MIDILIN](https://github.com/generalgroovy/midilin) / [MIDIWIN](https://github.com/generalgroovy/midiwin) | Traktor hardware repurposed for Linux/Sway and Windows desktop control | Companion implementations, setup guides, and test sources |
+
+Each project page explains its scope and the evidence available to inspect.
+The guitar practice application in this repository is documented below.
+
 ## What It Generates
 
 - Guitar tab with accent and rest cues
