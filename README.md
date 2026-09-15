@@ -1,12 +1,10 @@
-# GeneralGroovy
+# Michail Sendetskiy
 
-GeneralGroovy is a static guitar and music-theory practice lab. It generates configurable practice material for picking, riffs, chords, progressions, arpeggios, legato, sweep picking, rhythm, ear training, fretboard mapping, reading, songwriting, and mixed practice sessions.
+**Software Engineer | Java & Python | Berlin**
 
-## Developer and selected projects
-
-I'm **Michail Sendetskiy**, a **Java/Python software developer** at
-**WeltWeitBau since 2020**. My work spans enterprise applications, developer
-tools, and applied AI.
+I develop enterprise applications at **WeltWeitBau**, where I have worked since
+2020. My independent and university projects extend that work into Python
+developer tools, automation and applied AI.
 
 [Portfolio](https://michail-sendetskiy.onetruepath.chatgpt.site) ·
 [LinkedIn](https://www.linkedin.com/in/michail-sendetskiy-63687a38/)
@@ -19,6 +17,12 @@ tools, and applied AI.
 
 Each project page explains its scope and the evidence available to inspect.
 The guitar practice application in this repository is documented below.
+
+---
+
+# GeneralGroovy
+
+GeneralGroovy is a static guitar and music-theory practice lab. It generates configurable practice material for picking, riffs, chords, progressions, arpeggios, legato, sweep picking, rhythm, ear training, fretboard mapping, reading, songwriting, and mixed practice sessions.
 
 ## What It Generates
 
