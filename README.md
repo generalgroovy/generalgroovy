@@ -22,6 +22,13 @@ The guitar practice application in this repository is documented below.
 
 # GeneralGroovy
 
+> **Guitar practice has moved to [ToneDef](https://generalgroovy.github.io/tonedef/)**
+> ([source](https://github.com/generalgroovy/tonedef)), the main guitar and bass
+> workspace. Portable Markdown practice cards carry this lab's session-journal
+> concept into ToneDef; ascending, descending and arch melodies also incorporate
+> the older Guitar Practice Generator's useful contours. This earlier lab remains
+> available as a reference. Existing browser data is not automatically migrated.
+
 GeneralGroovy is a static guitar and music-theory practice lab. It generates configurable practice material for picking, riffs, chords, progressions, arpeggios, legato, sweep picking, rhythm, ear training, fretboard mapping, reading, songwriting, and mixed practice sessions.
 
 ## What It Generates
