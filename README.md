@@ -1,92 +1,34 @@
 # Michail Sendetskiy
 
-**Software Engineer | Java & Python | Berlin**
+**Software Engineer · Applications, Automation & Interactive Systems · Berlin**
 
-I develop enterprise applications at **WeltWeitBau**, where I have worked since
-2020. My independent and university projects extend that work into Python
-developer tools, automation and applied AI.
+I develop enterprise applications at **WeltWeitBau**, translating complex requirements into maintainable software and diagnosing faults across application layers. My work spans business logic, SQL data processing, configurable workflows, role-based permissions and desktop interfaces, from technical analysis through implementation and validation.
 
-[Portfolio](https://michail-sendetskiy.onetruepath.chatgpt.site) ·
-[LinkedIn](https://www.linkedin.com/in/michail-sendetskiy-63687a38/)
+My independent projects extend that work into developer tools, applied AI, hardware integration, browser audio and games.
 
-| Project | What it explores | Public material |
+[Portfolio](https://generalgroovy.web.app/) · [LinkedIn](https://www.linkedin.com/in/michail-sendetskiy-63687a38/) · [Contact](mailto:sendetskiy.m@googlemail.com)
+
+## Selected work
+
+| Project | Engineering focus | Explore |
 | --- | --- | --- |
-| [CoopNavigationSDS](https://github.com/generalgroovy/sds) | Reproducible evaluation of cooperative speech dialogue systems | Source, experiment manifests, technical documentation, and test sources |
-| [Autocode](projects/autocode.md) | A local coding agent using Python and Ollama | Case study and dated component-verification evidence; source remains private |
-| [MIDILIN](https://github.com/generalgroovy/midilin) / [MIDIWIN](https://github.com/generalgroovy/midiwin) | Traktor hardware repurposed for Linux/Sway and Windows desktop control | Companion implementations, setup guides, and test sources |
+| **CoopNavigationSDS** | Modular speech-dialogue evaluation with reproducible experiments and task-grounded metrics | [Source & research guide](https://github.com/generalgroovy/sds) · [Case study](https://generalgroovy.web.app/projects/speech-evaluation/) |
+| **MIDILIN / MIDIWIN** | Configurable controller input, desktop automation and diagnostics for Linux/Sway and Windows | [Linux source](https://github.com/generalgroovy/midilin) · [Windows source](https://github.com/generalgroovy/midiwin) · [Overview](https://generalgroovy.web.app/apps/midilin-midiwin/) |
+| **ToneDef** | Interactive guitar and bass theory, constrained pattern generation and expressive browser audio | [Live app](https://generalgroovy.github.io/tonedef/) · [Source](https://github.com/generalgroovy/tonedef) |
+| **8-Bit Loop Generator** | Seeded chiptune patterns, clip sequencing, recoverable project state and WAV export | [Live app](https://generalgroovy.github.io/8bit_song_generator/) · [Source](https://github.com/generalgroovy/8bit_song_generator) |
+| **Platform Fighter** | Deterministic combat simulation, CPU opponents and browser input/rendering | [Play](https://generalgroovy.github.io/smash/) · [Source](https://github.com/generalgroovy/smash) |
+| **Autocode** | Local coding-agent platform with persistent run state, validated tool calls and recovery controls | [Case study](https://generalgroovy.web.app/projects/autocode/) — source private |
 
-Each project page explains its scope and the evidence available to inspect.
-The guitar practice application in this repository is documented below.
+## Technical background
+
+- **Languages:** Java, Python, JavaScript, C++, SQL, HTML/CSS and GDScript.
+- **Applications and tools:** Swing/JavaFX, Tkinter, Web Audio, Godot, Git, Jenkins and Linux.
+- **Education:** B.Sc. Computer Science, Technische Universität Berlin, completed 2026. Thesis: *Automatic Evaluation of Speech Dialog Systems*.
+
+## Work together
+
+I welcome conversations about software engineering roles and project collaboration across applications, automation and interactive systems. [Get in touch](mailto:sendetskiy.m@googlemail.com) or explore the [portfolio](https://generalgroovy.web.app/). CV available on request.
 
 ---
 
-# GeneralGroovy
-
-> **Guitar practice has moved to [ToneDef](https://generalgroovy.github.io/tonedef/)**
-> ([source](https://github.com/generalgroovy/tonedef)), the main guitar and bass
-> workspace. Portable Markdown practice cards carry this lab's session-journal
-> concept into ToneDef; ascending, descending and arch melodies also incorporate
-> the older Guitar Practice Generator's useful contours. This earlier lab remains
-> available as a reference. Existing browser data is not automatically migrated.
-
-GeneralGroovy is a static guitar and music-theory practice lab. It generates configurable practice material for picking, riffs, chords, progressions, arpeggios, legato, sweep picking, rhythm, ear training, fretboard mapping, reading, songwriting, and mixed practice sessions.
-
-## What It Generates
-
-- Guitar tab with accent and rest cues
-- Fretboard maps with roots, scale tones, played tones, and optional interval labels
-- Chord charts with harmonic function notes
-- Technique constraints for picking, articulation, dynamics, and tone
-- Practice loops with tempo ramps and timed sections
-- Creative variations for improvisation, songwriting, ear work, and fretboard transfer
-- Markdown session cards that can be copied into a practice journal
-- Browser-native playback with step highlighting, loop control, waveform selection, volume, accents, rests, and cent offsets
-- Lockable randomization so any parameter can be protected while the rest of the session mutates
-
-## Configuration Surface
-
-GeneralGroovy is designed around practical musical categories:
-
-- **Session:** focus mode, goal, duration, difficulty, density
-- **Theory:** key, scale/mode, progression style, chord voicing
-- **Advanced theory:** functional harmony, modal practice, jazz chord-scale, post-tonal set theory, serial rows, negative harmony, neo-Riemannian moves, axis theory, spectral approximations, polymodal chromaticism, microtonal offsets, mathematical patterning
-- **Instrument:** tuning, capo, strings, fret window, max frets, open strings
-- **Neck strategy:** box, diagonal, one-string, three-notes-per-string, CAGED, open position, wide interval
-- **Rhythm:** tempo, ramp, bars, meter, feel, swing, rest probability, Euclidean rhythms, clave, polymeter, isorhythm, additive patterns, stochastic rests, silence studies
-- **Technique:** picking system, articulation, dynamics, tone, harmony/theory/technique toggles
-- **Transformations:** inversion, retrograde, retrograde inversion, negative harmony, parallel/relative shifts, leading-tone exchange, chromatic planing, augmentation, diminution, rotation
-
-The app intentionally keeps all of this client-side: no build step, no server dependency, and no account required.
-
-## Run Locally
-
-Open `index.html` directly, or serve the folder:
-
-```bash
-npm start
-```
-
-Then visit:
-
-```text
-http://localhost:4173/
-```
-
-## GitHub Pages
-
-The repository is configured for GitHub Pages through GitHub Actions. The live site is:
-
-```text
-https://generalgroovy.github.io/generalgroovy/
-```
-
-If Pages is ever reset, set **Settings -> Pages -> Source** to **GitHub Actions**.
-
-## Test
-
-```bash
-node test.mjs
-node --check app.js
-node --check generator.js
-node --check server.mjs
-```
+The earlier guitar practice lab remains in this repository. Its [reference and setup guide](GUITAR-PRACTICE-REFERENCE.md) is preserved; [ToneDef](https://generalgroovy.github.io/tonedef/) is the current guitar and bass application.
